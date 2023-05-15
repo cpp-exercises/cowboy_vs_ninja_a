@@ -1,29 +1,32 @@
 #include <string>
 #include "Point.hpp"
 
+
 namespace ariel
 {
 
-    using namespace std;
+  using namespace std;
 
-    class Character{
-      private:
-      string name;
-      Point location;
-      int hit;
+  class Character
+  {
+  private:
+    string name;
+    Point location;
+    int hits;
+
+  public:
+    Character(string, Point, int);
+    bool isAlive();
+    double distance(Character &other);
+    void hit(int);
+    string getName();
+    Point getLocation();
+    string print();
+  };
+
+ 
+
+  
 
 
-      public:
-
-      bool isAlive();
-      double distance(Character &other);
-      void hit(int);
-      string getName();
-      Point getLocation();
-      void print();
-      
-
-
-
-    }
 }
