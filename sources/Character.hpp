@@ -1,5 +1,8 @@
 #include <string>
 #include "Point.hpp"
+#include "Ninja.hpp"
+#include "Cowboy.hpp"
+
 
 
 namespace ariel

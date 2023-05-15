@@ -9,7 +9,7 @@ namespace ariel{
             return true;
         } 
         string Cowboy::print(){
-            return "";
+            //return "";
         } 
         void  Cowboy::reload(){} 
 }
