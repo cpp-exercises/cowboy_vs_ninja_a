@@ -31,6 +31,11 @@ namespace ariel
     int stillAlive(); // Returns the number of alive warriors in the team.
     void print();     // Prints the details of all warriors in the team.
     // Distructor
+    virtual ~Team() = default;                      
+    Team(const Team &) = delete;            // Copy constructor
+    Team &operator=(const Team &) = delete; // Copy assignment operator
+    Team(Team &&) = delete;                 // Move constructor
+    Team &operator=(Team &&) = delete;  
 
     // Going over all members of the team (for attacking, printing, or comparing)
     // will always be done in the following order:

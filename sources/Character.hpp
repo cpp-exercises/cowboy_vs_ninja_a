@@ -26,6 +26,8 @@ namespace ariel
     string getName();
     Point getLocation();
     virtual string print();
+    void setHits(int);
+    int getHits();
   };
 
 }

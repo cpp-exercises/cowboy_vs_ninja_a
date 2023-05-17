@@ -12,4 +12,7 @@ namespace ariel{
             return "";
         } 
         void  Cowboy::reload(){} 
+        int Cowboy::getBullets(){
+            return numOfBullets;
+        }
 }

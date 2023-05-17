@@ -14,6 +14,7 @@ namespace ariel{
         bool hasboolets();//if exists bullets in stack
         virtual string print() override;
         void reload();//reload the gun with 6 bullets
+        int getBullets();
     };
 }
 #endif
