@@ -1,3 +1,5 @@
+#ifndef COWBOY_H
+#define COWBOY_H
 #include "Character.hpp"
 
 namespace ariel{
@@ -7,13 +9,14 @@ namespace ariel{
         int numOfBullets;
 
     public:
-        Cowboy(string, Point, int, int); // Constractor (created with 6 bullets and 110 hits)
-        void shoot(const Character &enemy);//if the cowboy is alive, shoot 1 bullet, take 10 hit from enemy.
+        Cowboy(string, Point); // Constractor (created with 6 bullets and 110 hits)
+        void shoot(const Character *enemy);//if the cowboy is alive, shoot 1 bullet, take 10 hit from enemy.
         bool hasboolets();//if exists bullets in stack
-        string print() override;
+        virtual string print() override;
         void reload();//reload the gun with 6 bullets
     };
 }
+#endif
   //For cowboys: int numOfBullets (created with 6 bullets and 110 hits)
   //Functions:
   //shoot(Character &enemy), if the cowboy is alive, shoot 1 bullet, take 10 hit from enemy.

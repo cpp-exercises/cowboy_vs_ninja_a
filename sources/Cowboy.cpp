@@ -2,14 +2,14 @@
 
 namespace ariel{
 
-        Cowboy::Cowboy(string _name, Point _location, int _hits, int _numOfBullets)
-        :Character(_name, _location, _hits),numOfBullets(_numOfBullets){}{} 
-        void  Cowboy::shoot(const Character &enemy){} 
+        Cowboy::Cowboy(string _name, Point _location)
+        :Character(_name, _location, 110),numOfBullets(6){}
+        void  Cowboy::shoot(const Character *enemy){} 
         bool  Cowboy::hasboolets(){
             return true;
         } 
         string Cowboy::print(){
-            //return "";
+            return "";
         } 
         void  Cowboy::reload(){} 
 }

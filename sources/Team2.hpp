@@ -1,3 +1,5 @@
+#ifndef TEAM2_H
+#define TEAM2_H
 #include "Team.hpp"
 // The same as Team, But the transition to the characters will be in the
 // order of addition without distinguishing cowboys or ninjas.
@@ -12,6 +14,7 @@ namespace ariel
   public:
     Team2(Character *leader);
     void add(Character *member) override;  // Overiding the add order
-    void attac(Character *enemy) override; // Overiding the attac rules
+    void attack(Team *enemy) override; // Overiding the attac rules
   };
 }
+#endif

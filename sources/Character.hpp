@@ -1,9 +1,10 @@
+#ifndef CHARACTER_H
+#define CHARACTER_H
+
 #include <string>
 #include "Point.hpp"
-#include "Ninja.hpp"
-#include "Cowboy.hpp"
-
-
+//#include "Cowboy.hpp"
+//#include "Ninja.hpp"
 
 namespace ariel
 {
@@ -24,12 +25,8 @@ namespace ariel
     void hit(int);
     string getName();
     Point getLocation();
-    string print();
+    virtual string print();
   };
 
- 
-
-  
-
-
 }
+#endif

@@ -1,3 +1,5 @@
+#ifndef SMARTTEAM_H
+#define SMARTTEAM_H
 #include "Team.hpp"
 //The transition to the team on the characters will be according to your choice
 //in whatever order you see fit to realize it is allowed and desirable at this 
@@ -14,6 +16,7 @@ namespace ariel
   public:
     SmartTeam(Character *leader);
     void add(Character *member) override;  // Overiding the add order
-    void attac(Character *enemy) override; // Overiding the attac rules
+    void attack(Team *enemy) override; // Overiding the attac rules
   };
 }
+#endif

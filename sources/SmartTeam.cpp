@@ -3,6 +3,6 @@
 namespace ariel
 {
     SmartTeam::SmartTeam(Character *leader) : Team(leader) {}
-    void SmartTeam::add(Character *member) override {}
-    void SmartTeam::attac(Character *enemy) override {}
+    void SmartTeam::add(Character *member)  {}
+    void SmartTeam::attack(Team *enemy)  {}
 }

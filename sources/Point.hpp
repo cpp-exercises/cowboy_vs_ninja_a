@@ -1,10 +1,8 @@
-
-
-
+#ifndef POINT_H
+#define POINT_H
 namespace ariel
 {
 
-    using namespace std;
 
     class Point{
       private:
@@ -16,11 +14,6 @@ namespace ariel
         double distance(Point &Other);
         void print();
         friend Point moveTowards(Point &source, Point &destenation, double distance);
-
-
-        
-
-    
-
-    }
+    };
 }
+#endif

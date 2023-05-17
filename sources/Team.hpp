@@ -1,4 +1,13 @@
+#ifndef TEAM_H
+#define TEAM_H
+#include <vector>
 #include "Character.hpp"
+#include "Cowboy.hpp"
+#include "Ninja.hpp"
+#include "OldNinja.hpp"
+#include "TrainedNinja.hpp"
+#include "YoungNinja.hpp"
+
 
 // Limited to 10 members, can be nunja or cowboy
 // When the team created, it gets pointer to leader.
@@ -17,8 +26,8 @@ namespace ariel
 
   public:
     Team(Character *leader); // Constructor, limited to 10 members.When the team created, it gets pointer to leader.
-    void add(Character &member);//Adds the warrior by it's type.
-    void attack(Team &enemy);//One team attacs another, by the rules of each type of warrior.
+    virtual void add(Character *member);//Adds the warrior by it's type.
+    virtual void attack(Team *enemy);//One team attacs another, by the rules of each type of warrior.
     int stillAlive(); // Returns the number of alive warriors in the team.
     void print();     // Prints the details of all warriors in the team.
     // Distructor
@@ -30,5 +39,6 @@ namespace ariel
     // characters were added - warriers list by vector.
     // When looking for the closest character, and two characters are at the same distance,
     //  the first character that was checked between them will be selected.
-  }
+  };
 }
+#endif

@@ -6,9 +6,13 @@ namespace ariel
         x = _x;
         y = _y;
     } 
-    double Point::distance(Point &other){}
+    double Point::distance(Point &other){
+        return 0;
+    }
     void Point::print(){}
-    Point moveTowards(Point &source, Point &destenation, double distance){}
+    Point moveTowards(Point &source, Point &destenation, double distance){
+        return Point(0,0);
+    }
 
 
 
