@@ -5,27 +5,50 @@
 #include <vector>
 #include <algorithm>
 #include "Character.hpp"
-namespace ariel
-{
-  class Team
-  {
-  private:
-  public:
-    std::vector<Character *> fighters;
-    Character *leader;
-    void iterateCharacters(const std::function<void(Character *)> &action) const;
 
-    Team(Character *leaderPtr);
+namespace ariel {
+    class Team
+    {
+    protected:
+        Character *leader;
+        int size;
 
-    void add(Character *fighter);
+    public:
+        Team();
 
-    void attack(Team *enemyTeam);
+        std::vector<Character *> members;
 
-    int stillAlive() const;
+        Team(Character *leader);
 
-    void print() const;
+        void add(Character *member);
 
-    ~Team();
-  };
-}
+        void attack(Team *enemyTeam);
+
+        int stillAlive() const;
+
+        void print();
+
+        virtual ~Team();
+
+
+        };
+
+
+    // class Team2 : public Team
+    // {
+    // public:
+    //     Team2(Character *leader);
+
+    //     void attack(Team *enemyTeam) override;
+    // };
+
+    // class SmartTeam : public Team
+    // {
+    // public:
+    //     SmartTeam(Character *leader);
+
+    //     void SmartTeam::attack(Team *enemyTeam) override;
+    // };
+} // namespace ariel
+
 #endif // TEAM_HPP

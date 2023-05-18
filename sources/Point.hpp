@@ -1,6 +1,7 @@
 #ifndef POINT_HPP
 #define POINT_HPP
-
+namespace ariel
+{
 class Point {
 private:
   double x;
@@ -17,5 +18,5 @@ public:
 
   Point moveTowards(const Point& source, const Point& destination, double distance) const;
 };
-
+}
 #endif  // POINT_HPP

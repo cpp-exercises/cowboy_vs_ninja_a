@@ -1,54 +1,51 @@
 #include <iostream>
 #include <cmath>
+#include "Point.hpp"
+
 namespace ariel
 {
-    class Point
+
+    Point::Point(double xCoord, double yCoord) : x(xCoord), y(yCoord) {}
+
+    double Point::distance(const Point &other) const
     {
-    private:
-        double x;
-        double y;
+        double dx = x - other.x;
+        double dy = y - other.y;
+        return std::sqrt(dx * dx + dy * dy);
+    }
 
-    public:
-        Point(double xCoord, double yCoord) : x(xCoord), y(yCoord) {}
+    void Point::print() const
+    {
+        std::cout << "(" << x << ", " << y << ")";
+    }
 
-        double distance(const Point &other) const
+    Point Point::moveTowards(const Point &source, const Point &destination, double distance) const
+    {
+        double dx = destination.x - source.x;
+        double dy = destination.y - source.y;
+        double currentDistance = std::sqrt(dx * dx + dy * dy);
+
+        if (currentDistance <= distance)
         {
-            double dx = x - other.x;
-            double dy = y - other.y;
-            return std::sqrt(dx * dx + dy * dy);
+            return destination;
         }
-
-        void print() const
+        else
         {
-            std::cout << "(" << x << ", " << y << ")";
+            double ratio = distance / currentDistance;
+            double newX = source.x + dx * ratio;
+            double newY = source.y + dy * ratio;
+            return Point(newX, newY);
         }
+    }
 
-        Point moveTowards(const Point &source, const Point &destination, double distance) const
-        {
-            double dx = destination.x - source.x;
-            double dy = destination.y - source.y;
-            double currentDistance = std::sqrt(dx * dx + dy * dy);
+    int Point::getX() const
+    {
+        return x;
+    }
 
-            if (currentDistance <= distance)
-            {
-                return destination;
-            }
-            else
-            {
-                double ratio = distance / currentDistance;
-                double newX = source.x + dx * ratio;
-                double newY = source.y + dy * ratio;
-                return Point(newX, newY);
-            }
-        }
-        int getX() const
-        {
-            return x;
-        }
-        int getY() const
-        {
-            return y;
-        }
+    int Point::getY() const
+    {
+        return y;
+    }
 
-    };
 } // namespace ariel

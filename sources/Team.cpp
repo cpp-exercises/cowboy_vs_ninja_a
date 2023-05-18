@@ -1,182 +1,136 @@
-
-// Team.cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <string>
 #include "Character.hpp"
+#include "Team.hpp"
+
 namespace ariel
 {
-    class Team
+
+    Team::Team(){};
+
+
+    Team::Team(Character *leader) : leader(leader)
     {
-    public:
-        Character *leader;
-        std::vector<Character *> fighters;
+        members.push_back(leader);
 
-        Team(Character *leaderPtr) : leader(leaderPtr) {}
+    }
 
-        void add(Character *fighter)
+    void Team::add(Character *member)
+    {
+        members.push_back(member);
+    }
+
+    std::vector<Character *> getTeamMembers(const Team &team)
+    {
+        return team.members;
+    }
+
+
+
+    int Team::stillAlive() const
+    {
+        int aliveCount = 0;
+        for (auto member : members)
         {
-            fighters.push_back(fighter);
+            if (member->stillAlive())
+            {
+                aliveCount++;
+            }
+        }
+        return aliveCount;
+    }
+
+    void Team::print()
+    {
+        for (auto member : members)
+        {
+            member->print();
+        }
+    }
+
+    void Team::attack(Team *enemyTeam)
+    {
+        // Check if leader is alive, if not, find a new leader
+        if (!leader->stillAlive())
+        {
+            Character *closestLivingMember = nullptr;
+            double minDistance = std::numeric_limits<double>::max();
+            for (auto member : members)
+            {
+                if (member->stillAlive() &&    leader->distance(member) < minDistance)
+                {
+                    closestLivingMember = member;
+                    minDistance = leader->distance(member);
+                }
+            }
+           leader = closestLivingMember;
         }
 
-        void attack(Team *enemyTeam)
+        // Now attack the enemy team
+        while (members.size() > 0 && enemyTeam->members.size() > 0)
         {
-            if (!leader->isAlive())
-            {
-                // Find the living character closest to the dead leader and set as new leader
-                double closestDistance = std::numeric_limits<double>::max();
-                Character *newLeader = nullptr;
-                for (Character *fighter : fighters)
-                {
-                    if (fighter->isAlive())
-                    {
-                        double distance = leader->getLocation().distance(fighter->getLocation());
-                        if (distance < closestDistance)
-                        {
-                            closestDistance = distance;
-                            newLeader = fighter;
-                        }
-                    }
-                }
-                if (newLeader)
-                    leader = newLeader;
-                else
-                    return; // No living character in the attacking group
-            }
-
+            // Choose a victim from the enemy team
             Character *victim = nullptr;
-            double closestDistance = std::numeric_limits<double>::max();
-            for (Character *enemy : enemyTeam->fighters)
+            double minDistance = std::numeric_limits<double>::max();
+            for (auto enemyMember : enemyTeam->members)
             {
-                if (enemy->isAlive())
+                if (enemyMember->stillAlive() && leader->distance(enemyMember) < minDistance)
                 {
-                    double distance = leader->getLocation().distance(enemy->getLocation());
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        victim = enemy;
-                    }
+                    victim = enemyMember;
+                    minDistance = leader->distance(enemyMember);
                 }
             }
 
-            while (!fighters.empty() && victim->isAlive())
+            // All living members of this team attack the chosen victim
+            for (auto member : members)
             {
-                iterateCharacters([&](Character *fighter)
-                                  {
-                                      if (fighter->isAlive())
-                                      {
-                                          Cowboy *cowboy = dynamic_cast<Cowboy *>(fighter);
-                                          if (cowboy)
-                                          {
-                                              if (cowboy->hasBullets())
-                                                  cowboy->shoot(victim);
-                                              else
-                                                  cowboy->reload();
-                                          }
-                                          else
-                                          {
-                                              Ninja *ninja = dynamic_cast<Ninja *>(fighter);
-                                              if (ninja)
-                                                  ninja->move(victim);
-                                          }
-                                      } });
-
-                if (!victim->isAlive())
+                if (member->stillAlive())
                 {
-                    victim = nullptr;
-                    closestDistance = std::numeric_limits<double>::max();
-                    for (Character *enemy : enemyTeam->fighters)
+                    Cowboy *cowboy = dynamic_cast<Cowboy *>(member);
+                    Ninja *ninja = dynamic_cast<Ninja *>(member);
+
+                    if (cowboy)
                     {
-                        if (enemy->isAlive())
+                        if (cowboy->hasBullets())
                         {
-                            double distance = leader->getLocation().distance(enemy->getLocation());
-                            if (distance < closestDistance)
-                            {
-                                closestDistance = distance;
-                                victim = enemy;
-                            }
+                            cowboy->shoot(victim);
+                        }
+                        else
+                        {
+                            cowboy->reload();
                         }
                     }
+                    else if (ninja)
+                    {
+                        if (ninja->distance(victim) < 1)
+                        {
+                            ninja->slash(victim);
+                        }
+                        else
+                        {
+                            ninja->move(victim);
+                        }
+                    }
+
+                    // If the victim is dead, break the loop to choose a new victim
+                    if (victim->stillAlive())
+                    {
+                        break;
+                    }
                 }
             }
         }
-
-        int stillAlive() const
+    }
+       Team::~Team()
         {
-            int aliveCount = 0;
-            for (Character *fighter : fighters)
+            for (auto member : members)
             {
-                if (fighter->isAlive())
-                    aliveCount++;
+                delete member;
             }
-            return aliveCount;
+            members.clear();
         }
 
-        void print() const
-        {
-            iterateCharacters([](Character *fighter)
-                              { fighter->print(); });
-        }
 
-        virtual void iterateCharacters(const std::function<void(Character *)> &action) const
-        {
-            for (Character *fighter : fighters)
-            {
-                if (fighter->isAlive())
-                {
-                    action(fighter);
-                }
-            }
-        }
-
-        ~Team()
-        {
-            for (Character *fighter : fighters)
-            {
-                delete fighter;
-            }
-        }
-    };
-
-    class Team2 : public Team
-    {
-    public:
-        void iterateCharacters(const std::function<void(Character *)> &action) const override
-        {
-            for (Character *fighter : fighters)
-            {
-                if (fighter->isAlive())
-                {
-                    action(fighter);
-                }
-            }
-        }
-    };
-
-    class SmartTeam : public Team
-    {
-    public:
-        void iterateCharacters(const std::function<void(Character *)> &
-                                   action) const override
-        {
-            std::vector<Character *> orderedFighters(fighters);
-            std::sort(orderedFighters.begin(), orderedFighters.end(), [&](Character *a, Character *b)
-                      {
-                          // Sort characters based on your custom logic
-                          // Here you can implement your smart and creative algorithm
-                          // to determine the order in which the characters will be iterated
-
-                          // Example: Sort based on hit points in descending order
-                        //   return a->getHitPoints() > b->getHitPoints();
-                         });
-
-            for (Character *fighter : orderedFighters)
-            {
-                if (fighter->isAlive())
-                {
-                    action(fighter);
-                }
-            }
-        }
-    };
 } // namespace ariel

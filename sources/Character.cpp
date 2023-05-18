@@ -1,137 +1,146 @@
-// Character.cpp
-
-namespace ariel
-{
 #include <iostream>
 #include <cmath>
 #include <string>
-#include "Point.hpp"
-    class Character
+#include "Character.hpp"
+
+namespace ariel
+{
+    Character::Character(std::string name, Point location, int hitPoints )
+        :  name(name), location(location), hitPoints(hitPoints) {}
+
+    bool Character::stillAlive() const
     {
-    protected:
-        Point location;
-        int hitPoints;
-        std::string name;
+        return hitPoints > 0;
+    }
 
-    public:
-        Character(Point location, int hitPoints, std::string name)
-            : location(location), hitPoints(hitPoints), name(name) {}
-
-        bool isAlive() const
-        {
-            return hitPoints > 0;
-        }
-
-        double distance(const Character *character) const
-        {
-            return location.distance(character->location);
-        }
-
-        void hit(int damage)
-        {
-            hitPoints -= damage;
-            if (hitPoints < 0)
-            {
-                hitPoints = 0;
-            }
-        }
-
-        std::string getName() const
-        {
-            return name;
-        }
-
-        Point getLocation() const
-        {
-            return location;
-        }
-
-        virtual void print() const = 0;
-    };
-    class Cowboy : public Character
+    double Character::distance(const Character *character) const
     {
-    private:
-        int bullets;
+        return location.distance(character->location);
+    }
 
-    public:
-        Cowboy(Point location, std::string name)
-            : Character(location, 110, name), bullets(6) {}
-
-        void shoot(Character *enemy)
-        {
-            if (isAlive() && bullets > 0)
-            {
-                enemy->hit(10);
-                bullets--;
-            }
-        }
-
-        bool hasBullets() const
-        {
-            return bullets > 0;
-        }
-
-        void reload()
-        {
-            bullets = 6;
-        }
-
-        void print() const override
-        {
-            std::cout << "C: " << name << (isAlive() ? ": " + std::to_string(hitPoints) : "") << " " << location.getX() << ", " << location.getY() << std::endl;
-        }
-    };
-
-    class Ninja : public Character
+    void Character::hit(int damage)
     {
-    protected:
-        int speed;
-
-    public:
-        Ninja(Point location, int hitPoints, int speed, std::string name)
-            : Character(location, hitPoints, name), speed(speed) {}
-
-        void move(Character *enemy)
+        hitPoints -= damage;
+        if (hitPoints < 0)
         {
-            if (isAlive())
-            {
-                Point newLocation = location.moveTowards(location, enemy->getLocation(), speed);
-                location = newLocation;
-            }
+            hitPoints = 0;
         }
+    }
 
-        void slash(Character *enemy)
+    std::string Character::getName() const
+    {
+        return name;
+    }
+
+    Point Character::getLocation() const
+    {
+        return location;
+    }
+
+    Character::~Character() {}
+
+    // Definitions for Cowboy
+
+    Cowboy::Cowboy(const std::string& charName, const Point& charLocation)
+        : Character(charName, charLocation, 110), bullets(6) {}
+
+    void Cowboy::shoot(Character *enemy)
+    {
+        if (stillAlive() && bullets > 0)
         {
-            if (isAlive() && distance(enemy) < 1)
-            {
-                enemy->hit(40);
-            }
+            enemy->hit(10);
+            bullets--;
         }
+    }
 
-        void print() const override
+    bool Cowboy::hasBullets() const
+    {
+        return bullets > 0;
+    }
+
+    void Cowboy::reload()
+    {
+        bullets = 6;
+    }
+
+    std::string Cowboy::print() const
+    {
+        std::string result = "C: " + name;
+        if (stillAlive())
         {
-            std::cout << "N: " << name << (isAlive() ? ": " + std::to_string(hitPoints) : "") << " " << location.getX() << ", " << location.getY() << std::endl;
+            result += ": " + std::to_string(hitPoints);
         }
-    };
+        result += " " + std::to_string(location.getX()) + ", " + std::to_string(location.getY());
+        return result;
+    }
 
-    class YoungNinja : public Ninja
-    {
-    public:
-        YoungNinja(Point location, std::string name)
-            : Ninja(location, 100, 14, name) {}
-    };
+    // Definitions for Ninja and subclasses
 
-    class TrainedNinja : public Ninja
-    {
-    public:
-        TrainedNinja(Point location, std::string name)
-            : Ninja(location, 120, 12, name) {}
-    };
+    
+    Ninja::Ninja(const std::string &name, const Point &location, int speed)
+        : Character(name, location, 100), speed(speed) {}
 
-    class OldNinja : public Ninja
+    void Ninja::move(Character *enemy)
     {
-    public:
-        OldNinja(Point location, std::string name)
-            : Ninja(location, 150, 8, name) {}
-    };
+        if (stillAlive())
+        {
+            Point newLocation = location.moveTowards(location, enemy->getLocation(), speed);
+            location = newLocation;
+        }
+    }
+
+    void Ninja::slash(Character *enemy)
+    {
+        if (stillAlive() && distance(enemy) < 1)
+        {
+            enemy->hit(40);
+        }
+    }
+    
+    Ninja::~Ninja() {}
+
+
+    std::string Ninja::print() const
+    {
+        std::string result = "N: " + name;
+        if (stillAlive())
+        {
+            result += ": " + std::to_string(hitPoints);
+        }
+        result += " " + std::to_string(location.getX()) + ", " + std::to_string(location.getY());
+        return result;
+    }
+
+    YoungNinja::YoungNinja(const std::string &name, const Point &location)
+    : Ninja(name, location, 14) {}
+
+    std::string YoungNinja::print() const
+    {
+        return "Ninja: " + getName();
+    }
+
+    YoungNinja::~YoungNinja() {}
+    
+    TrainedNinja::TrainedNinja(const std::string &name, const Point &location)
+        : Ninja(name, location, 12) {}
+
+    
+    std::string TrainedNinja::print() const
+    {
+
+        return "Ninja: " + getName();
+    }
+    TrainedNinja::~TrainedNinja() {}
+
+    OldNinja::OldNinja(const std::string &name, const Point &location)
+        : Ninja(name, location, 8) {}
+
+
+    std::string OldNinja::print() const
+    {
+
+        return "Ninja: " + getName();
+    }
+        OldNinja::~OldNinja() {}
+
 } // namespace ariel
