@@ -16,7 +16,7 @@ namespace ariel
         std::string name;
 
     public:
-        Character( std::string name, Point location, int hitPoints);
+        Character(std::string name, Point location, int hitPoints);
 
         bool stillAlive() const;
 
@@ -28,12 +28,11 @@ namespace ariel
 
         Point getLocation() const;
 
-        virtual std::string print() const = 0;
+        virtual std::string print() const;
 
         int getHitPoints() const;
 
         virtual ~Character();
-        
     };
 
     class Cowboy : public Character
@@ -51,11 +50,9 @@ namespace ariel
         void reload();
 
         std::string print() const override;
-        
     };
-    
 
-     class Ninja : public Character
+    class Ninja : public Character
     {
     private:
         int speed;
@@ -65,9 +62,8 @@ namespace ariel
 
         void move(Character *enemy);
         void slash(Character *enemy);
-        std::string print() const override;        
+        std::string print() const override;
         virtual ~Ninja();
-
     };
 
     class YoungNinja : public Ninja
@@ -92,6 +88,7 @@ namespace ariel
         OldNinja(const std::string &name, const Point &location);
         virtual ~OldNinja();
         std::string print() const override;
-    };} // namespace ariel
+    };
+} // namespace ariel
 
 #endif // CHARACTER_HPP

@@ -6,7 +6,8 @@
 #include <algorithm>
 #include "Character.hpp"
 
-namespace ariel {
+namespace ariel
+{
     class Team
     {
     protected:
@@ -21,34 +22,17 @@ namespace ariel {
         Team(Character *leader);
 
         void add(Character *member);
+        Character *closestLivingMember();
 
         void attack(Team *enemyTeam);
 
         int stillAlive() const;
 
-        void print();
+        std::string print() const;
 
-        virtual ~Team();
+        ~Team();
+    };
 
-
-        };
-
-
-    // class Team2 : public Team
-    // {
-    // public:
-    //     Team2(Character *leader);
-
-    //     void attack(Team *enemyTeam) override;
-    // };
-
-    // class SmartTeam : public Team
-    // {
-    // public:
-    //     SmartTeam(Character *leader);
-
-    //     void SmartTeam::attack(Team *enemyTeam) override;
-    // };
 } // namespace ariel
 
 #endif // TEAM_HPP

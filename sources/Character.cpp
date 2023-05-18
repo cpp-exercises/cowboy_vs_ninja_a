@@ -2,11 +2,14 @@
 #include <cmath>
 #include <string>
 #include "Character.hpp"
+#include "Point.hpp"
+#include <sstream>
+#include <limits>
 
 namespace ariel
 {
-    Character::Character(std::string name, Point location, int hitPoints )
-        :  name(name), location(location), hitPoints(hitPoints) {}
+    Character::Character(std::string name, Point location, int hitPoints)
+        : name(name), location(location), hitPoints(hitPoints) {}
 
     bool Character::stillAlive() const
     {
@@ -20,11 +23,16 @@ namespace ariel
 
     void Character::hit(int damage)
     {
-        hitPoints -= damage;
-        if (hitPoints < 0)
-        {
-            hitPoints = 0;
-        }
+        // hitPoints -= damage;
+        // if (hitPoints < 0)
+        // {
+        //     hitPoints = 0;
+        // }
+    }
+    std::string Character::print() const
+    {
+        std::string result = "Name: " + name + ", Location: (" + std::to_string(location.getX()) + ", " + std::to_string(location.getY()) + "), Hit Points: " + std::to_string(hitPoints);
+        return result;
     }
 
     std::string Character::getName() const
@@ -41,12 +49,12 @@ namespace ariel
 
     // Definitions for Cowboy
 
-    Cowboy::Cowboy(const std::string& charName, const Point& charLocation)
+    Cowboy::Cowboy(const std::string &charName, const Point &charLocation)
         : Character(charName, charLocation, 110), bullets(6) {}
 
     void Cowboy::shoot(Character *enemy)
     {
-        if (stillAlive() && bullets > 0)
+        if (stillAlive() && bullets > 0 && enemy != nullptr)
         {
             enemy->hit(10);
             bullets--;
@@ -65,24 +73,27 @@ namespace ariel
 
     std::string Cowboy::print() const
     {
-        std::string result = "C: " + name;
-        if (stillAlive())
+        std::string result = "Cowboy: ";
+        if (!name.empty())
         {
-            result += ": " + std::to_string(hitPoints);
+            result += name;
+            if (stillAlive())
+            {
+                result += ": " + std::to_string(hitPoints);
+            }
+            result += " " + std::to_string(location.getX()) + ", " + std::to_string(location.getY());
         }
-        result += " " + std::to_string(location.getX()) + ", " + std::to_string(location.getY());
         return result;
     }
 
     // Definitions for Ninja and subclasses
 
-    
     Ninja::Ninja(const std::string &name, const Point &location, int speed)
         : Character(name, location, 100), speed(speed) {}
 
     void Ninja::move(Character *enemy)
     {
-        if (stillAlive())
+        if (stillAlive() && enemy != nullptr)
         {
             Point newLocation = location.moveTowards(location, enemy->getLocation(), speed);
             location = newLocation;
@@ -91,18 +102,17 @@ namespace ariel
 
     void Ninja::slash(Character *enemy)
     {
-        if (stillAlive() && distance(enemy) < 1)
+        if (stillAlive() && distance(enemy) < 1 && enemy != nullptr)
         {
             enemy->hit(40);
         }
     }
-    
-    Ninja::~Ninja() {}
 
+    Ninja::~Ninja() {}
 
     std::string Ninja::print() const
     {
-        std::string result = "N: " + name;
+        std::string result = "Ninja: " + name;
         if (stillAlive())
         {
             result += ": " + std::to_string(hitPoints);
@@ -112,7 +122,7 @@ namespace ariel
     }
 
     YoungNinja::YoungNinja(const std::string &name, const Point &location)
-    : Ninja(name, location, 14) {}
+        : Ninja(name, location, 14) {}
 
     std::string YoungNinja::print() const
     {
@@ -120,11 +130,10 @@ namespace ariel
     }
 
     YoungNinja::~YoungNinja() {}
-    
+
     TrainedNinja::TrainedNinja(const std::string &name, const Point &location)
         : Ninja(name, location, 12) {}
 
-    
     std::string TrainedNinja::print() const
     {
 
@@ -135,12 +144,11 @@ namespace ariel
     OldNinja::OldNinja(const std::string &name, const Point &location)
         : Ninja(name, location, 8) {}
 
-
     std::string OldNinja::print() const
     {
 
         return "Ninja: " + getName();
     }
-        OldNinja::~OldNinja() {}
+    OldNinja::~OldNinja() {}
 
 } // namespace ariel
